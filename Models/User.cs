@@ -21,6 +21,10 @@ namespace Models
         public string Name { get; set; }
         [JsonPropertyName("DtBirth")]
         public DateTime DtBirth { get; set; }
+        [JsonPropertyName("Mail")]
+        public string Mail { get; set; }
+        [JsonPropertyName("Password")]
+        public string Password { get; set; }
         [JsonPropertyName("Status")]
         public bool Status { get; set; }
         [JsonPropertyName("Address")]
@@ -37,6 +41,13 @@ namespace Models
         public string Name { get; set; }
         public DateTime DtBirth { get; set; }
         [Required]
+        public string Mail { get; set; }
+        [Required]
+        [StringLength(maximumLength: 6, MinimumLength = 3)]
+        public string Password { get; set; }
+        [Required]
+        public bool Status { get; set; }
+        [Required]
         public AddressDTO Address { get; set; }
     }
 
@@ -48,6 +59,9 @@ namespace Models
         [Required]
         [StringLength(30)]
         public string NewName { get; set; }
+        [Required]
+        [StringLength(maximumLength: 6, MinimumLength = 3)]
+        public string NewPassword { get; set; }
         public AddressDTO NewAddress { get; set; }
     }
 

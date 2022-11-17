@@ -49,5 +49,16 @@ namespace Models
             $"{unformattedCpf.Substring(3, 3)}." +
             $"{unformattedCpf.Substring(6, 3)}-" +
             $"{unformattedCpf.Substring(9, 2)}";
+
+        public static bool MailIsValid(string mail)
+        {
+            string domain = "@admin.com";
+            bool validator = mail.Contains(domain);
+
+            if (validator)
+                return true;
+            else
+                return false;
+        }
     }
 }

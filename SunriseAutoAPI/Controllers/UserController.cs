@@ -36,21 +36,33 @@ namespace SunriseAutoAPI.Controllers
         [HttpPost]
         public ActionResult<User> Post(UserDTO u)
         {
-            if (!Utils.CPFIsValid(u.UnformattedCPF)) return BadRequest("Invalid CPF.");
+            if (!Utils.CPFIsValid(u.UnformattedCPF)) 
+                return BadRequest("Invalid CPF.");
 
             string formattedCpf = Utils.FormatCPF(u.UnformattedCPF);
 
-            if (_userService.Get(formattedCpf) != null) return Unauthorized("User already exists.");
+            if (_userService.Get(formattedCpf) != null) 
+                return Unauthorized("User already exists.");
+
+            if (Utils.MailIsValid(u.Mail))
+                u.Status = true;
+            if (!Utils.MailIsValid(u.Mail))
+                u.Status = false;
+
+
 
             var address = ViaCepAPIConsummer.GetAdress(u.Address.ZipCode).Result;
-            if (address.ZipCode == null) return NotFound();
+            if (address.ZipCode == null) 
+                return NotFound();
 
             User user = new()
             {
                 CPF = formattedCpf,
                 Name = u.Name.ToUpper(),
                 DtBirth = u.DtBirth,
-                Status = false,
+                Mail = u.Mail,
+                Password = u.Password,
+                Status = u.Status,
                 Address = new Address
                 {
                     ZipCode = address.ZipCode,
@@ -81,6 +93,7 @@ namespace SunriseAutoAPI.Controllers
             if (address.ZipCode == null) return NotFound();
 
             user.Name = u.NewName.ToUpper();
+            user.Password = u.NewPassword;
             user.Address = new Address
             {
                 ZipCode = address.ZipCode,
